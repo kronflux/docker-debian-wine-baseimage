@@ -1,1 +1,1 @@
-# docker-debian-wine-baseimage
+A simple Debian Bookworm slim baseimage with Wine and Winetricks with locales installed and set to en_US.UTF-8 UTF-8
