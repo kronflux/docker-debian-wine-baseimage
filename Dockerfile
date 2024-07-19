@@ -14,7 +14,7 @@ RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free non-free-fi
     dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get -y install --no-install-recommends \
-        curl gnupg2 iproute2 lib32gcc-s1 libncurses5:i386 \
+        cabextract curl gnupg2 iproute2 lib32gcc-s1 libncurses5:i386 \
         libncurses6:i386 libntlm0 libsdl2-2.0-0 libsdl2-2.0-0:i386 \
         numactl tzdata unzip winbind xauth xvfb && \
     wget -qO- https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
