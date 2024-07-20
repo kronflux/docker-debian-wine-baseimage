@@ -1,25 +1,27 @@
 # Set base debian image
 FROM debian:bookworm-slim
 
-# Set noninteractive mode for apt, configure locales, install prerequisite packages
+# Set noninteractive mode for apt, configure locales, and install prerequisite packages
 ARG DEBIAN_FRONTEND=noninteractive
-RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
-    echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
+
+RUN echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list && \
     echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
     echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get -y upgrade && \
-    apt-get -y install --no-install-recommends \
-        cabextract curl cron gettext gnupg \
-        iproute2 jq lib32gcc-s1 libncurses5:i386 \
-        libncurses6:i386 libntlm0 libsdl2-2.0-0 \
-        libsdl2-2.0-0:i386 locales numactl procps \
-        screen tzdata unzip wget winbind xauth xvfb && \
+    apt-get -y install --no-install-recommends locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     update-locale LANG=en_US.UTF-8 && \
     apt-get -y install --reinstall ca-certificates && \
     dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get -y install --no-install-recommends \
+        cabextract curl cron gettext gnupg \
+        iproute2 jq lib32gcc-s1 \
+        libntlm0 libsdl2-2.0-0 \
+        locales numactl procps \
+        screen tzdata unzip wget winbind xauth xvfb && \
     wget -qO- https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
     echo "deb https://dl.winehq.org/wine-builds/debian/ bookworm main" > /etc/apt/sources.list.d/wine.list && \
     apt-get update && \
