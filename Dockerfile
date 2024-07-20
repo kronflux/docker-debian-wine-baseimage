@@ -4,9 +4,11 @@ FROM debian:bookworm-slim
 # Set noninteractive mode for apt, configure locales, and install prerequisite packages
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list && \
-    echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
-    echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
+RUN echo "" > /etc/apt/sources.list && \
+    rm -f /etc/apt/sources.list.d/* && \
+    echo "deb http://deb.debian.org/debian bookworm contrib main non-free non-free-firmware" > /etc/apt/sources.list && \
+    echo "deb http://deb.debian.org/debian bookworm-updates contrib main non-free non-free-firmware" >> /etc/apt/sources.list && \
+    echo "deb http://deb.debian.org/debian-security bookworm-security contrib main non-free non-free-firmware" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get -y upgrade && \
     apt-get -y install --no-install-recommends locales && \
@@ -22,8 +24,9 @@ RUN echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-fr
         libntlm0 libsdl2-2.0-0 \
         locales numactl procps \
         screen tzdata unzip wget winbind xauth xvfb && \
-    wget -qO- https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
-    echo "deb https://dl.winehq.org/wine-builds/debian/ bookworm main" > /etc/apt/sources.list.d/wine.list && \
+    mkdir -pm755 /etc/apt/keyrings && \
+    wget -qO- https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key && \
+    echo "deb [signed-by=/etc/apt/keyrings/winehq-archive.key] https://dl.winehq.org/wine-builds/debian/ bookworm main" > /etc/apt/sources.list.d/winehq.list && \
     apt-get update && \
     apt-get -y install --no-install-recommends winehq-stable && \
     apt-get -y autoremove --purge gnupg && \
